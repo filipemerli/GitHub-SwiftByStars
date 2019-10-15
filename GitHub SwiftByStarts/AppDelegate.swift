@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let reposListViewController = ReposListViewController()
+        let reposListViewController = ReposListTableViewController()
         window?.rootViewController = reposListViewController
         window?.makeKeyAndVisible()
         
