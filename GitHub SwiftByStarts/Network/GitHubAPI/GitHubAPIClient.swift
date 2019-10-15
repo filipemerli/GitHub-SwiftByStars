@@ -13,27 +13,35 @@ final class GitHubAPIClient {
     }()
     
     let session: URLSession
+    let defaultParameters = ["q": "language:swift", "sort" : "stars"]
+    let paginationParameters = ["page": "1", "per_page" : "20"]
+    let path = "search/repositories"
     
     init(session: URLSession = URLSession.shared) {
         self.session = session
     }
     
-    func fetchRepos(name: String,completion: @escaping (Result<[Repositorie], GitHubResponseError>) -> Void) {
-        let urlRequest = URLRequest(url: endPoint)
-        session.dataTask(with: urlRequest, completionHandler: { data, response, error in
-            guard
-                let httpResponse = response as? HTTPURLResponse, httpResponse.hasSuccessStatusCode,
-                let data = data
-                else {
-                    completion(Result.failure(GitHubResponseError.rede))
-                    return
-            }
+    func fetchRepositories(completion: @escaping (Result<GitHubSearchResponse, GitHubResponseError>) -> Void) {
+        let urlRequest = URLRequest(url: endPoint.appendingPathComponent(path))
+        
+        let parameters = defaultParameters.merging(paginationParameters, uniquingKeysWith: +)
+        let encodedURLRequest = urlRequest.encode(with: parameters)
+      
+        print("Request = \(encodedURLRequest)")
+        session.dataTask(with: encodedURLRequest, completionHandler: { data, response, error in
+        guard let httpResponse = response as? HTTPURLResponse,
+        httpResponse.hasSuccessStatusCode,
+        let dados = data
+        else {
             
-            guard let decodedResponse = try? JSONDecoder().decode([Repositorie].self, from: data) else {
-                completion(Result.failure(GitHubResponseError.decoding))
-                return
-            }
-            completion(Result.success(decodedResponse))
+            completion(Result.failure(GitHubResponseError.rede))
+            return
+        }
+            guard let decodedResponse = try? JSONDecoder().decode(GitHubSearchResponse.self, from: dados) else {
+            completion(Result.failure(GitHubResponseError.decoding))
+            return
+        }
+        completion(Result.success(decodedResponse))
         }).resume()
     }
     

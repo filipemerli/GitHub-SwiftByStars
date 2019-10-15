@@ -11,33 +11,24 @@ import UIKit
 class ReposListTableViewController: UITableViewController {
     
     let reuseIdentifier = "ReposCell"
+    let gitHubClient = GitHubAPIClient()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(RepositoriesByStarsCell.self, forCellReuseIdentifier: reuseIdentifier)
-        
-        let session: URLSession
-        
-        func fetchRepos(completion: @escaping (Result<[Repositories], GitHubResponseError>) -> Void) {
-            let urlRequest = URLRequest(url: GitHubSwiftRequest)
-            session.dataTask(with: urlRequest, completionHandler: { data, response, error in
-                guard
-                    let httpResponse = response as? HTTPURLResponse, httpResponse.hasSuccessStatusCode,
-                    let data = data
-                    else {
-                        completion(Result.failure(GitHubResponseError.rede))
-                        return
-                }
-                
-                guard let decodedResponse = try? JSONDecoder().decode([Repositories].self, from: data) else {
-                    completion(Result.failure(GitHubResponseError.decoding))
-                    return
-                }
-                completion(Result.success(decodedResponse))
-            }).resume()
-        }
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        gitHubClient.fetchRepositories() { result in
+                   switch result {
+                   case .failure( _):
+                       print("ERRO")
+                   case .success( _):
+                    print("FOI")
+                   }
+               }
     }
 
     // MARK: - Table view data source
