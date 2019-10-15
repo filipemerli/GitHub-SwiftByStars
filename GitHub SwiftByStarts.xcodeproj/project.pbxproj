@@ -22,6 +22,7 @@
 		A779A5912354D57500066984 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A779A58F2354D57500066984 /* LaunchScreen.storyboard */; };
 		A7D067EB2355638B001761DE /* ReposListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D067EA2355638B001761DE /* ReposListTableViewController.swift */; };
 		A7E1AD332355406000A8F777 /* RepositoriesByStarsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E1AD322355406000A8F777 /* RepositoriesByStarsCell.swift */; };
+		A7F8B94B2356876E00F7944B /* ReposListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F8B94A2356876E00F7944B /* ReposListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		A779A5922354D57500066984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7D067EA2355638B001761DE /* ReposListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposListTableViewController.swift; sourceTree = "<group>"; };
 		A7E1AD322355406000A8F777 /* RepositoriesByStarsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoriesByStarsCell.swift; sourceTree = "<group>"; };
+		A7F8B94A2356876E00F7944B /* ReposListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReposListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		A779A5982354D5AF00066984 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7F8B9492356872700F7944B /* ViewModels */,
 				A7E1AD3023553FF000A8F777 /* TableViewsComponents */,
 				A779A5992354D5DB00066984 /* ViewControllers */,
 			);
@@ -156,6 +159,14 @@
 				A7E1AD322355406000A8F777 /* RepositoriesByStarsCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		A7F8B9492356872700F7944B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A7F8B94A2356876E00F7944B /* ReposListViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +247,7 @@
 				A725253D2355E25B005F505F /* GitHubSwiftRequest.swift in Sources */,
 				A779A5852354D57300066984 /* AppDelegate.swift in Sources */,
 				A72525432355E574005F505F /* Repositorie.swift in Sources */,
+				A7F8B94B2356876E00F7944B /* ReposListViewModel.swift in Sources */,
 				A761E59223562B9B0085CFDA /* GitHubSearchResponse.swift in Sources */,
 				A72525472355E6D9005F505F /* GitHubAPIClient.swift in Sources */,
 				A72525452355E5A4005F505F /* UserBio.swift in Sources */,
