@@ -16,6 +16,8 @@
 		A72525452355E5A4005F505F /* UserBio.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72525442355E5A4005F505F /* UserBio.swift */; };
 		A72525472355E6D9005F505F /* GitHubAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72525462355E6D9005F505F /* GitHubAPIClient.swift */; };
 		A761E59223562B9B0085CFDA /* GitHubSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A761E59123562B9B0085CFDA /* GitHubSearchResponse.swift */; };
+		A769DF352356BFE6006F896B /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A769DF342356BFE6006F896B /* UIImageViewExtension.swift */; };
+		A769DF372356C05A006F896B /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A769DF362356C05A006F896B /* ProfileImage.swift */; };
 		A779A5852354D57300066984 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779A5842354D57300066984 /* AppDelegate.swift */; };
 		A779A5872354D57300066984 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A779A5862354D57300066984 /* SceneDelegate.swift */; };
 		A779A58E2354D57500066984 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A779A58D2354D57500066984 /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 		A72525442355E5A4005F505F /* UserBio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBio.swift; sourceTree = "<group>"; };
 		A72525462355E6D9005F505F /* GitHubAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubAPIClient.swift; sourceTree = "<group>"; };
 		A761E59123562B9B0085CFDA /* GitHubSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSearchResponse.swift; sourceTree = "<group>"; };
+		A769DF342356BFE6006F896B /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
+		A769DF362356C05A006F896B /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		A779A5812354D57300066984 /* GitHub SwiftByStarts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GitHub SwiftByStarts.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A779A5842354D57300066984 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A779A5862354D57300066984 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +66,7 @@
 			children = (
 				A72525422355E574005F505F /* Repositorie.swift */,
 				A72525442355E5A4005F505F /* UserBio.swift */,
+				A769DF362356C05A006F896B /* ProfileImage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -88,6 +93,14 @@
 			path = GitHubAPI;
 			sourceTree = "<group>";
 		};
+		A769DF312356B366006F896B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A769DF342356BFE6006F896B /* UIImageViewExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		A779A5782354D57300066984 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +120,7 @@
 		A779A5832354D57300066984 /* GitHub SwiftByStarts */ = {
 			isa = PBXGroup;
 			children = (
+				A769DF312356B366006F896B /* Extensions */,
 				A72525362355E0FB005F505F /* Network */,
 				A72525332355E02B005F505F /* Model */,
 				A779A59C2354E24100066984 /* Resources */,
@@ -240,10 +254,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A72525412355E506005F505F /* Result.swift in Sources */,
+				A769DF372356C05A006F896B /* ProfileImage.swift in Sources */,
 				A72525392355E170005F505F /* GitHubResponseError.swift in Sources */,
 				A7E1AD332355406000A8F777 /* RepositoriesByStarsCell.swift in Sources */,
 				A7D067EB2355638B001761DE /* ReposListTableViewController.swift in Sources */,
 				A72525352355E041005F505F /* HTTPResponse.swift in Sources */,
+				A769DF352356BFE6006F896B /* UIImageViewExtension.swift in Sources */,
 				A725253D2355E25B005F505F /* GitHubSwiftRequest.swift in Sources */,
 				A779A5852354D57300066984 /* AppDelegate.swift in Sources */,
 				A72525432355E574005F505F /* Repositorie.swift in Sources */,
