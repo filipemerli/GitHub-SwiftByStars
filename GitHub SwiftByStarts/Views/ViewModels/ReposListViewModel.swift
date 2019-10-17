@@ -46,6 +46,9 @@ final class ReposListViewModel {
         return repos[index]
     }
     
+    public func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= currentCount
+    }
     
     public func fetchRepositories() {
         guard !isFetching else {

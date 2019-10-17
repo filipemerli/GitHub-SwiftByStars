@@ -19,19 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        
-        
         if #available(iOS 13.0, *) {
             // use SceneDelegate
         } else {
             window = UIWindow(frame: UIScreen.main.bounds)
-            
-            let reposListViewController = ReposListTableViewController()
-            window?.rootViewController = reposListViewController
             window?.makeKeyAndVisible()
+            window?.rootViewController = RootMainViewController()
         }
-        
-        
         return true
     }
 
