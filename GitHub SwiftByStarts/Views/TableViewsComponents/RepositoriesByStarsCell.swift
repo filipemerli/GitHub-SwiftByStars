@@ -25,6 +25,7 @@ class RepositoriesByStarsCell: UITableViewCell {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 35
         image.clipsToBounds = true
+        image.backgroundColor = .lightGray
         return image
     }()
     
@@ -64,6 +65,11 @@ class RepositoriesByStarsCell: UITableViewCell {
                 }
             }
         }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        profileImageView.image = #imageLiteral(resourceName: "person_placeholder")
     }
     
     override func prepareForReuse() {

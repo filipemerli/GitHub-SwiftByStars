@@ -23,7 +23,6 @@ class RootMainViewController: UIViewController {
         view.backgroundColor = .groupTableViewBackground
         viewModel = ReposListViewModel(delegate: self)
         reposListTableViewController.register(RepositoriesByStarsCell.self, forCellReuseIdentifier: reuseIdentifier)
-        reposListTableViewController.prefetchDataSource = self
         reposListTableViewController.dataSource = self
         reposListTableViewController.delegate = self
         configInitialView()
@@ -68,31 +67,14 @@ class RootMainViewController: UIViewController {
             self.reposListTableViewController.reloadData()
         }
     }
-    
-    func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row >= (viewModel.currentCount - 1)
-      }
-      
-    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
-        let indexPathsForVisibleRows = reposListTableViewController.indexPathsForVisibleRows ?? []
-        let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
-        return Array(indexPathsIntersection)
-    }
-    
 
 }
 
     // MARK: - Table View Model Delegate
     
 extension RootMainViewController: ReposListViewModelDelegate {
-    
-    func didFetch(with newIndexPathsToReload: [IndexPath]?) {
+    func didFetch() {
         endOfFetchRequest()
-        guard let newIndexPathsToReload = newIndexPathsToReload else {
-          return
-        }
-        let indexPathsToReload = visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
-        reposListTableViewController.reloadRows(at: indexPathsToReload, with: .automatic)
     }
     
     func didFailFetch(with reason: String) {
@@ -101,34 +83,17 @@ extension RootMainViewController: ReposListViewModelDelegate {
     
 }
 
-    // MARK: - Table data source prefetching
-
-extension RootMainViewController: UITableViewDataSourcePrefetching {
-    
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        if indexPaths.contains(where: isLoadingCell) {
-            print("VAI")
-            //viewModel.fetchPopularMovies()
-        }
-    }
-    
-}
-
     // MARK: - Table view data source
 
 extension RootMainViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("Will Display cell \(indexPath.row)")
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.currentCount
+        viewModel.currentCount
     }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! RepositoriesByStarsCell
-        if isLoadingCell(for: indexPath) {
+        if !(viewModel.currentCount > 0) {
             cell.setCell(with: .none)
         } else {
             cell.setCell(with: viewModel.repo(at: indexPath.row))
@@ -142,6 +107,12 @@ extension RootMainViewController: UITableViewDataSource {
     
 extension RootMainViewController: UITableViewDelegate {
         
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if (indexPath.row + 3) >= viewModel.currentCount {
+            viewModel.fetchRepositories()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }

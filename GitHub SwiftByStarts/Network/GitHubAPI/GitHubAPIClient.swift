@@ -14,17 +14,16 @@ final class GitHubAPIClient {
     
     let session: URLSession
     let defaultParameters = ["q": "language:swift", "sort" : "stars"]
-    let paginationParameters = ["page": "1", "per_page" : "20"]
     let path = "search/repositories"
     
     init(session: URLSession = URLSession.shared) {
         self.session = session
     }
     
-    func fetchRepositories(completion: @escaping (Result<GitHubSearchResponse, GitHubResponseError>) -> Void) {
+    func fetchRepositories(page: Int, completion: @escaping (Result<GitHubSearchResponse, GitHubResponseError>) -> Void) {
         let urlRequest = URLRequest(url: endPoint.appendingPathComponent(path))
         
-        let parameters = defaultParameters.merging(paginationParameters, uniquingKeysWith: +)
+        let parameters = ["page": "\(page)", "per_page" : "20"].merging(defaultParameters, uniquingKeysWith: +)
         let encodedURLRequest = urlRequest.encode(with: parameters)
       
         session.dataTask(with: encodedURLRequest, completionHandler: { data, response, error in

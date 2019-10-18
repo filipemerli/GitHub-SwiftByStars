@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol ReposListViewModelDelegate: class {
-    func didFetch(with newIndexPathsToReload: [IndexPath]?)
+    func didFetch()
     func didFailFetch(with reason: String)
 }
 
@@ -51,7 +51,7 @@ final class ReposListViewModel {
             return
         }
         isFetching = true
-        client.fetchRepositories() { result in
+        client.fetchRepositories(page: currentPage) { result in
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -62,9 +62,9 @@ final class ReposListViewModel {
                 DispatchQueue.main.async {
                     self.currentPage += 1
                     self.total = result.totalCount
-                    self.repos.append(contentsOf: result.repos)
                     self.isFetching = false
-                    self.delegate?.didFetch(with: .none)
+                    self.repos.append(contentsOf: result.repos)
+                    self.delegate?.didFetch()
                 }
             }
         }
@@ -75,8 +75,7 @@ final class ReposListViewModel {
             return
         }
         isFetching = true
-        
-        client.fetchRepositories() { result in
+        client.fetchRepositories(page: 1) { result in
             switch result {
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -84,28 +83,16 @@ final class ReposListViewModel {
                     self.delegate?.didFailFetch(with: error.reason)
                 }
             case .success(let result):
-                self.repos.removeAll()
                 self.currentPage = 1
                 DispatchQueue.main.async {
+                    self.repos.removeAll()
                     self.currentPage += 1
-                    self.total = result.totalCount
                     self.repos.append(contentsOf: result.repos)
                     self.isFetching = false
-                    if self.currentPage * 20 > self.currentCount {
-                        let indexPathsToReload = self.calculateIndexPathsToReload(from: result.repos)
-                        self.delegate?.didFetch(with: indexPathsToReload)
-                    } else {
-                        self.delegate?.didFetch(with: .none)
-                    }
+                    self.delegate?.didFetch()
                 }
             }
         }
-    }
-    
-    private func calculateIndexPathsToReload(from appendRepos: [Repositorie]) -> [IndexPath] {
-        let startIndex = repos.count - appendRepos.count
-        let endIndex = startIndex + appendRepos.count
-        return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
     }
     
 }
