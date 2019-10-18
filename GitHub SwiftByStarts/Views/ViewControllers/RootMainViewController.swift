@@ -40,6 +40,7 @@ class RootMainViewController: UIViewController {
     
     private func configInitialView() {
         view.addSubview(reposListTableViewController)
+        reposListTableViewController.isHidden = true
         reposListTableViewController.translatesAutoresizingMaskIntoConstraints = false
         reposListTableViewController.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor).isActive = true
         reposListTableViewController.leadingAnchor.constraint(equalTo:view.safeAreaLayoutGuide.leadingAnchor).isActive = true
@@ -62,19 +63,36 @@ class RootMainViewController: UIViewController {
     private func endOfFetchRequest() {
         activityIndicator.stopAnimating()
         pullToRefresh.endRefreshing()
+        reposListTableViewController.isHidden = false
+        DispatchQueue.main.async {
+            self.reposListTableViewController.reloadData()
+        }
     }
+    
+    func isLoadingCell(for indexPath: IndexPath) -> Bool {
+        return indexPath.row >= (viewModel.currentCount - 1)
+      }
+      
+    func visibleIndexPathsToReload(intersecting indexPaths: [IndexPath]) -> [IndexPath] {
+        let indexPathsForVisibleRows = reposListTableViewController.indexPathsForVisibleRows ?? []
+        let indexPathsIntersection = Set(indexPathsForVisibleRows).intersection(indexPaths)
+        return Array(indexPathsIntersection)
+    }
+    
 
 }
 
-    // MARK: - Table data source prefetching
+    // MARK: - Table View Model Delegate
     
 extension RootMainViewController: ReposListViewModelDelegate {
     
     func didFetch(with newIndexPathsToReload: [IndexPath]?) {
         endOfFetchRequest()
-        DispatchQueue.main.async {
-            self.reposListTableViewController.reloadData()
+        guard let newIndexPathsToReload = newIndexPathsToReload else {
+          return
         }
+        let indexPathsToReload = visibleIndexPathsToReload(intersecting: newIndexPathsToReload)
+        reposListTableViewController.reloadRows(at: indexPathsToReload, with: .automatic)
     }
     
     func didFailFetch(with reason: String) {
@@ -88,7 +106,7 @@ extension RootMainViewController: ReposListViewModelDelegate {
 extension RootMainViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        if indexPaths.contains(where: viewModel.isLoadingCell) {
+        if indexPaths.contains(where: isLoadingCell) {
             print("VAI")
             //viewModel.fetchPopularMovies()
         }
@@ -100,13 +118,17 @@ extension RootMainViewController: UITableViewDataSourcePrefetching {
 
 extension RootMainViewController: UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("Will Display cell \(indexPath.row)")
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.currentCount
     }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! RepositoriesByStarsCell
-        if viewModel.isLoadingCell(for: indexPath) {
+        if isLoadingCell(for: indexPath) {
             cell.setCell(with: .none)
         } else {
             cell.setCell(with: viewModel.repo(at: indexPath.row))

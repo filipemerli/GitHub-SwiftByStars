@@ -10,14 +10,16 @@ import UIKit
 
 class RepositoriesByStarsCell: UITableViewCell {
     
-    let containerView:UIView = {
+     // MARK: Properties
+
+    let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         return view
     }()
     
-    let profileImageView:UIImageView = {
+    let profileImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -41,13 +43,27 @@ class RepositoriesByStarsCell: UITableViewCell {
         return label
     }()
     
-    let activityIndicator = UIActivityIndicatorView(style: .white)
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = .systemGray
+    // MARK: Class Functions
+    
+    func setCell(with repo: Repositorie?) {
         
+        if let repo = repo {
+            repoLabel.text = "Repo: \(repo.name)"
+            ownerNameLabel.text = "Owner: \(repo.owner.login)"
+            profileImageView.loadImageWithUrl(theUrl: repo.owner.avatarUrl) { result in
+                switch result {
+                case .failure ( _):
+                    DispatchQueue.main.async {
+                        self.profileImageView.image = #imageLiteral(resourceName: "person_placeholder")
+                    }
+                case .success(let response):
+                    DispatchQueue.main.async {
+                        self.profileImageView.image = response.profileImage
+                    }
+                }
+            }
+        }
     }
     
     override func prepareForReuse() {
@@ -55,23 +71,12 @@ class RepositoriesByStarsCell: UITableViewCell {
       setCell(with: .none)
     }
     
-    func setCell(with repo: Repositorie?) {
-      if let repo = repo {
-        repoLabel.text = "Repo: \(repo.name)"
-        ownerNameLabel.text = "Owner: \(repo.owner.login)"
-        activityIndicator.center = profileImageView.center
-        activityIndicator.startAnimating()
-        
-      } else {
-        //activityIndicator.stopAnimating()
-      }
-    }
+    // MARK: Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.contentView.addSubview(profileImageView)
-        self.profileImageView.addSubview(activityIndicator)
         containerView.addSubview(repoLabel)
         containerView.addSubview(ownerNameLabel)
         self.contentView.addSubview(containerView)

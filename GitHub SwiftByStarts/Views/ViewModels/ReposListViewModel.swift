@@ -20,7 +20,7 @@ final class ReposListViewModel {
     
     private weak var delegate: ReposListViewModelDelegate?
     private var repos: [Repositorie] = []
-    private var currentPage = 1
+    public var currentPage = 1
     private var total = 0
     private var isFetching = false
     
@@ -46,16 +46,11 @@ final class ReposListViewModel {
         return repos[index]
     }
     
-    public func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        return indexPath.row >= currentCount
-    }
-    
     public func fetchRepositories() {
         guard !isFetching else {
             return
         }
         isFetching = true
-        
         client.fetchRepositories() { result in
             switch result {
             case .failure(let error):
@@ -96,7 +91,12 @@ final class ReposListViewModel {
                     self.total = result.totalCount
                     self.repos.append(contentsOf: result.repos)
                     self.isFetching = false
-                    self.delegate?.didFetch(with: .none)
+                    if self.currentPage * 20 > self.currentCount {
+                        let indexPathsToReload = self.calculateIndexPathsToReload(from: result.repos)
+                        self.delegate?.didFetch(with: indexPathsToReload)
+                    } else {
+                        self.delegate?.didFetch(with: .none)
+                    }
                 }
             }
         }

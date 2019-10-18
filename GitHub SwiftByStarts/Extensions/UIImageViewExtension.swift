@@ -8,13 +8,12 @@
 
 import UIKit
 
-let imgCache = NSCache<AnyObject, AnyObject>()
+let imgCache = NSCache<NSString, UIImage>()
 extension UIImageView {
-    func loadImageWithUrl(posterUrl: String, completion: @escaping (Result<ProfileImageResponse, GitHubResponseError>) -> Void) {
-        let urlConcat = "https://image.tmdb.org/t/p/w500" + posterUrl
-        let url = URL(string: urlConcat)
+    func loadImageWithUrl(theUrl: String, completion: @escaping (Result<ProfileImageResponse, GitHubResponseError>) -> Void) {
+        let url = URL(string: theUrl)
         image = nil
-        if let imageFromCache = imgCache.object(forKey: urlConcat as AnyObject) as? UIImage {
+        if let imageFromCache = imgCache.object(forKey: theUrl as NSString) {
             self.image = imageFromCache
             let poster = ProfileImageResponse.init(profileImage: self.image!)
             completion(Result.success(poster))
@@ -29,10 +28,11 @@ extension UIImageView {
                     return
             }
             let downloadedImage = UIImage(data: data)!
-            imgCache.setObject(downloadedImage, forKey: urlConcat as AnyObject)
+            imgCache.setObject(downloadedImage, forKey: url!.absoluteString as NSString)
             let image = ProfileImageResponse.init(profileImage: downloadedImage)
             completion(Result.success(image))
         }).resume()
     }
-    
+
 }
+

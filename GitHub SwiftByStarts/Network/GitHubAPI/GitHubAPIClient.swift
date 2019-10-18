@@ -27,7 +27,6 @@ final class GitHubAPIClient {
         let parameters = defaultParameters.merging(paginationParameters, uniquingKeysWith: +)
         let encodedURLRequest = urlRequest.encode(with: parameters)
       
-        print("Request = \(encodedURLRequest)")
         session.dataTask(with: encodedURLRequest, completionHandler: { data, response, error in
         guard let httpResponse = response as? HTTPURLResponse,
         httpResponse.hasSuccessStatusCode,
